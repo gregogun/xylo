@@ -1,12 +1,20 @@
 export const globalStyles = {
   global: (props) => ({
+    '*, *::before, *::after': {
+      boxSizing: 'inherit'
+    },
     body: {
       overflowX: 'hidden',
-      bg: props.colorMode === 'light' ? 'default.light' : 'default.dark',
-      color: props.colorMode === 'light' ? 'default.dark' : 'default.light'
+      bg: props.colorMode === 'light' ? 'white' : 'black',
+      color: props.colorMode === 'light' ? 'black' : 'white',
+      boxSizing: 'border-box'
     },
     div: {
-      borderRadius: 'sm'
+      borderRadius: 'sm',
+      boxSizing: 'inherit'
+    },
+    li: {
+      listStyleType: 'none'
     }
   })
 };
