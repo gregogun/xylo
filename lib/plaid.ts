@@ -26,9 +26,15 @@ export const PLAID_COUNTRY_CODES = (
 // at https://dashboard.plaid.com/team/api.
 export const PLAID_REDIRECT_URI = process.env.PLAID_REDIRECT_URI || '';
 
+// We store the access_token in memory - in production, store it in a secure
+// persistent data store
+let ACCESS_TOKEN = null;
+let PUBLIC_TOKEN = null;
+let ITEM_ID = null;
+
 // Initialize the Plaid client
 
-export const configuration = new Configuration({
+const configuration = new Configuration({
   basePath: PlaidEnvironments[PLAID_ENV],
   baseOptions: {
     headers: {
