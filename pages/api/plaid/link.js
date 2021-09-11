@@ -25,6 +25,6 @@ export default async (_, res) => {
     };
     return res.status(200).json({ linkToken, message });
   } catch (error) {
-    return res.status(500).json(formatError(error));
+    return res.status(500).json(error);
   }
 };
