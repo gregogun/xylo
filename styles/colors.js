@@ -15,5 +15,8 @@ export const colors = {
     3: '#acacac',
     4: '#5a5a5a',
     5: '#3b3b3b'
+  },
+  accent: {
+    red: '#F33D48'
   }
 };

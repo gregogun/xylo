@@ -1,6 +1,6 @@
 import { createBreakpoints } from '@chakra-ui/theme-tools';
-import { extendTheme } from '@chakra-ui/react';
-import { globalStyles } from './globals';
+import { extendTheme, ThemeConfig } from '@chakra-ui/react';
+import { styles } from './globals';
 import { colors } from './colors';
 import { Heading, Text, fonts, textStyles } from './typography';
 
@@ -13,12 +13,18 @@ const breakpoints = createBreakpoints({
   '3xl': '120em'
 });
 
+const config: ThemeConfig = {
+  initialColorMode: 'light',
+  useSystemColorMode: false
+};
+
 const overrides = {
   breakpoints,
-  globalStyles,
+  styles,
   colors,
   fonts,
-  textStyles
+  textStyles,
+  config
   // components: {
   //   Heading,
   //   Text

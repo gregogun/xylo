@@ -1,6 +1,6 @@
 export const fonts = {
-  heading: 'Sora, Tahoma, sans-serif',
-  body: 'Montserrat, Verdana, sans-serif'
+  heading: 'Epilogue, apple-system, sans-serif',
+  body: 'Inter, apple-system, sans-serif'
 };
 
 export const Heading = {
