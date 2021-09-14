@@ -1,11 +1,7 @@
 import { Box, Button, Center, Heading, Icon, Text } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
 import { useEffect, useState, FC } from 'react';
-import {
-  usePlaidLink,
-  PlaidLinkOptions,
-  PlaidLinkOnSuccess,
-} from 'react-plaid-link';
+import { usePlaidLink, PlaidLinkOptions } from 'react-plaid-link';
 import Connect from '@/components/icons/connect';
 import Logo from '@/components/icons/logo';
 
@@ -20,7 +16,7 @@ const PlaidLink: FC<Props> = ({ token }) => {
   const onSuccess = (public_token, metadata) => {
     //console.log(metadata);
 
-    fetch('api/plaid', {
+    fetch('/api/plaid', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
