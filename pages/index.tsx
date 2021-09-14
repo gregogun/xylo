@@ -1,4 +1,4 @@
-import { Box, Button, Center, Heading, Text } from '@chakra-ui/react';
+import { Box, Button, Center, Heading, Icon, Text } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
 import { useEffect, useState, FC } from 'react';
 import {
@@ -7,10 +7,11 @@ import {
   PlaidLinkOnSuccess,
 } from 'react-plaid-link';
 import Connect from '@/components/icons/connect';
+import Logo from '@/components/icons/logo';
 
 interface Props {
   token: string;
-  children?: JSX.Element;
+  children?: string;
 }
 
 const PlaidLink: FC<Props> = ({ token }) => {
@@ -77,9 +78,15 @@ const IndexPage = () => {
 
   return (
     <Box p="2rem 1rem" w="100vw" minH="100vh">
-      <Text mb="6rem" align="center">
-        X Y L O
-      </Text>
+      <Icon
+        display="block"
+        mx="auto"
+        width="6rem"
+        height="3rem"
+        mb="6rem"
+        align="center"
+        as={Logo}
+      />
       <Heading
         fontWeight="semibold"
         fontSize={{ base: '2xl', xl: '5xl' }}
@@ -92,11 +99,28 @@ const IndexPage = () => {
       <Text fontSize="xl" align="center" mb="4rem">
         The best way to manage your finance is here.
       </Text>
-      {token === null ? (
-        <Text>loading...</Text>
-      ) : (
+      {token ? (
         <Center>
           <PlaidLink token={token}>Connect a bank account</PlaidLink>
+        </Center>
+      ) : (
+        <Center>
+          <Button
+            isLoading
+            onClick={() => open()}
+            fontWeight="normal"
+            color="white"
+            bg="default.black"
+            _hover={{
+              bg: 'transparent',
+              color: 'default.black',
+              boxShadow: '0 0 0 1px',
+            }}
+            transitionDuration="250ms"
+            fontSize="md"
+            p="1.5rem 2rem"
+            mb={{ base: '8rem', xl: '3rem' }}
+          />
         </Center>
       )}
     </Box>
