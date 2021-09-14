@@ -10,12 +10,12 @@ const breakpoints = createBreakpoints({
   lg: '62em',
   xl: '80em',
   '2xl': '90em',
-  '3xl': '120em'
+  '3xl': '120em',
 });
 
 const config: ThemeConfig = {
   initialColorMode: 'light',
-  useSystemColorMode: false
+  useSystemColorMode: false,
 };
 
 const overrides = {
@@ -24,7 +24,7 @@ const overrides = {
   colors,
   fonts,
   textStyles,
-  config
+  config,
   // components: {
   //   Heading,
   //   Text
