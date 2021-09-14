@@ -4,6 +4,7 @@ import { useEffect, useState, FC } from 'react';
 import { usePlaidLink, PlaidLinkOptions } from 'react-plaid-link';
 import Connect from '@/components/icons/connect';
 import Logo from '@/components/icons/logo';
+import { server } from '../config';
 
 interface Props {
   token: string;
@@ -14,9 +15,7 @@ const PlaidLink: FC<Props> = ({ token }) => {
   const router = useRouter();
 
   const onSuccess = (public_token, metadata) => {
-    //console.log(metadata);
-
-    fetch('/api/plaid', {
+    fetch(`${server}/api/plaid`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

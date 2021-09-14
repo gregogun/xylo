@@ -21,6 +21,7 @@ import moment from 'moment';
 import { formatBalance } from '@/utils/formatBalance';
 import useIcon from '@/utils/useIcon';
 import SpendingChart from '@/components/chart';
+import { server } from 'config';
 
 const TopBarUtils = ({ ...props }) => {
   return (
@@ -347,7 +348,7 @@ const Overview = ({ accounts, transactions }) => {
 export default Overview;
 
 export async function getServerSideProps() {
-  const res = await fetch('http://localhost:3000/api/plaid');
+  const res = await fetch(`${server}/api/plaid`);
   const { accounts, transactions } = await res.json();
 
   return { props: { accounts, transactions } };
