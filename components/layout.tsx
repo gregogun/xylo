@@ -3,12 +3,15 @@ import {
   Button,
   Divider,
   Flex,
+  IconButton,
   List,
   ListItem,
   Text,
   useMediaQuery,
   VStack,
 } from '@chakra-ui/react';
+import { FiMenu } from 'react-icons/fi';
+import { IconType } from 'react-icons';
 
 const Nav = () => {
   return (
@@ -40,6 +43,7 @@ const MobileNav = () => {
   return (
     <>
       <Flex
+        alignItems="center"
         display={{ base: 'flex', xl: 'none' }}
         pb="2rem"
         w="100%"
@@ -47,7 +51,12 @@ const MobileNav = () => {
         as="nav"
       >
         <Text fontWeight="bold">X Y L O</Text>
-        <Text>Menu</Text>
+        <IconButton
+          boxShadow="0 0 0 0.5px"
+          variant="ghost"
+          aria-label="open menu"
+          icon={<FiMenu />}
+        />
       </Flex>
       <Divider mb="2rem" />
     </>
