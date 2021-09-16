@@ -11,7 +11,7 @@ export default async (req, res) => {
   const tokenRequest = {
     public_token: public_token,
     client_id: PLAID_CLIENT_ID,
-    secret: PLAID_SECRET
+    secret: PLAID_SECRET,
   };
 
   try {
@@ -26,7 +26,7 @@ export default async (req, res) => {
 
     // get accounts data
     const accountsRes = await plaidClient.accountsGet({
-      access_token: ACCESS_TOKEN
+      access_token: ACCESS_TOKEN,
     });
     const accounts = await accountsRes.data.accounts;
 
@@ -40,15 +40,15 @@ export default async (req, res) => {
       secret: PLAID_SECRET,
       // TRY MANUALLY ENTERING DATE
       start_date: startDate,
-      end_date: endDate
+      end_date: endDate,
     });
     const transactions = await transactionsRes.data.transactions;
 
     return res.status(200).json({
       accounts,
-      transactions
+      transactions,
     });
   } catch (error) {
-    return res.status(500).json(error);
+    return res.status(500).json({ message: error.message });
   }
 };
