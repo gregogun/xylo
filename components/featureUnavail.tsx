@@ -1,4 +1,4 @@
-import { Box, Center, Heading, Icon } from '@chakra-ui/react';
+import { Box, Center, Heading, Icon, Link, Text } from '@chakra-ui/react';
 import { FiLock } from 'react-icons/fi';
 
 export default function FeatureUnavailable({ title }) {
@@ -14,10 +14,19 @@ export default function FeatureUnavailable({ title }) {
             boxSize="8rem"
             as={FiLock}
           />
-          <Heading fontSize="xl" textAlign="center">
+          <Text fontSize="xl" textAlign="center">
             This feature is currently unavailable. You can find updates on our
-            progress on Github.
-          </Heading>
+            progress on{' '}
+            <Link
+              fontWeight="bold"
+              color="gray.4"
+              href="https://github.com/gregogun/xylo"
+              isExternal
+            >
+              Github
+            </Link>
+            .
+          </Text>
         </Box>
       </Center>
     </Box>
