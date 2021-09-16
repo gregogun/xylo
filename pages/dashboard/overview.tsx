@@ -22,6 +22,9 @@ import { formatBalance } from '@/utils/formatBalance';
 import useIcon from '@/utils/useIcon';
 import SpendingChart from '@/components/chart';
 import { server } from 'config';
+import fetcher from '@/lib/fetcher';
+import useSWR from 'swr';
+import ErrorPage from 'next/error';
 
 const TopBarUtils = ({ ...props }) => {
   return (
@@ -304,23 +307,29 @@ const Transaction = ({ transaction }) => {
   );
 };
 
-const Overview = ({ accounts, transactions }) => {
+const Overview = () => {
+  const { data, error } = useSWR('/api/plaid', fetcher);
+
+  if (error) {
+    return <ErrorPage statusCode={error.status} />;
+  }
+
   useEffect(() => {
-    console.log(accounts, transactions);
+    console.log(data.accounts, data.transactions);
   }, []);
   return (
     <Layout>
       <Box
         id="skip"
         mx="auto"
-        display={accounts ? 'block' : 'grid'}
-        placeItems={accounts ? 'unset' : 'center'}
+        display={data.accounts ? 'block' : 'grid'}
+        placeItems={data.accounts ? 'unset' : 'center'}
         as="main"
         w={{ base: '100%', sm: '80%', xl: '100%' }}
         ml={{ xl: '2rem' }}
         pr={{ base: null, '2xl': '4rem' }}
       >
-        {accounts ? (
+        {data.accounts ? (
           <>
             <TopBar />
             <Divider
@@ -333,8 +342,8 @@ const Overview = ({ accounts, transactions }) => {
               flexDir={{ base: 'column', xl: 'row' }}
               justify="space-between"
             >
-              <LeftSide accounts={accounts} />
-              <RecentTransactions transactions={transactions} />
+              <LeftSide accounts={data.accounts} />
+              <RecentTransactions transactions={data.transactions} />
             </Flex>
           </>
         ) : (
@@ -347,9 +356,9 @@ const Overview = ({ accounts, transactions }) => {
 
 export default Overview;
 
-export async function getServerSideProps() {
-  const res = await fetch(`${server}/api/plaid`);
-  const { accounts, transactions } = await res.json();
+// export async function getServerSideProps() {
+//   const res = await fetch(`${server}/api/plaid`);
+//   const { accounts, transactions } = await res.json();
 
-  return { props: { accounts, transactions } };
-}
+//   return { props: { accounts, transactions } };
+// }
