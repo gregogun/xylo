@@ -9,7 +9,6 @@ import {
   Image,
   List,
   ListItem,
-  Spinner,
   Text,
   useMediaQuery,
 } from '@chakra-ui/react';
@@ -22,9 +21,7 @@ import { formatBalance } from '@/utils/formatBalance';
 import useIcon from '@/utils/useIcon';
 import SpendingChart from '@/components/chart';
 import { server } from 'config';
-import fetcher from '@/lib/fetcher';
-import useSWR from 'swr';
-import ErrorPage from 'next/error';
+import Error from 'next/error';
 
 const TopBarUtils = ({ ...props }) => {
   return (
@@ -77,7 +74,6 @@ const LeftSide = ({ accounts }) => {
   const [isMd] = useMediaQuery('(min-width: 768px)');
 
   function getTotalBalance(arr): any {
-    // const slicedArr = arr.slice(0, 2);
     const amounts = retrieveAmounts(arr);
     return getSum(amounts);
   }
@@ -307,58 +303,95 @@ const Transaction = ({ transaction }) => {
   );
 };
 
-const Overview = () => {
-  const { data, error } = useSWR('/api/plaid', fetcher);
+const DummyData = () => {
+  const data: any = import('../../data/data.json').then(
+    (module) => module.default
+  );
+  const accounts = data.accounts;
+  const transactions = data.transactions;
 
-  if (error) {
-    return <ErrorPage statusCode={error.status} />;
+  return (
+    <Box
+      id="skip"
+      mx="auto"
+      display={accounts ? 'block' : 'grid'}
+      placeItems={accounts ? 'unset' : 'center'}
+      as="main"
+      w={{ base: '100%', sm: '80%', xl: '100%' }}
+      ml={{ xl: '2rem' }}
+      pr={{ base: null, '2xl': '4rem' }}
+    >
+      <TopBar />
+      <Divider display={{ base: 'none', xl: 'block' }} mt="0.5rem" mb="2rem" />
+      <Flex
+        w="100%"
+        flexDir={{ base: 'column', xl: 'row' }}
+        justify="space-between"
+      >
+        <LeftSide accounts={accounts} />
+        <RecentTransactions transactions={transactions} />
+      </Flex>
+    </Box>
+  );
+};
+
+const Overview = ({ errorCode, accounts, transactions }) => {
+  if (errorCode) {
+    return <Error statusCode={errorCode} />;
   }
 
-  useEffect(() => {
-    console.log(data.accounts, data.transactions);
-  }, []);
   return (
     <Layout>
-      <Box
-        id="skip"
-        mx="auto"
-        display={data.accounts ? 'block' : 'grid'}
-        placeItems={data.accounts ? 'unset' : 'center'}
-        as="main"
-        w={{ base: '100%', sm: '80%', xl: '100%' }}
-        ml={{ xl: '2rem' }}
-        pr={{ base: null, '2xl': '4rem' }}
-      >
-        {data.accounts ? (
-          <>
-            <TopBar />
-            <Divider
-              display={{ base: 'none', xl: 'block' }}
-              mt="0.5rem"
-              mb="2rem"
-            />
-            <Flex
-              w="100%"
-              flexDir={{ base: 'column', xl: 'row' }}
-              justify="space-between"
-            >
-              <LeftSide accounts={data.accounts} />
-              <RecentTransactions transactions={data.transactions} />
-            </Flex>
-          </>
-        ) : (
-          <Spinner size="xl" />
-        )}
-      </Box>
+      {accounts && transactions ? (
+        <Box
+          id="skip"
+          mx="auto"
+          display={accounts ? 'block' : 'grid'}
+          placeItems={accounts ? 'unset' : 'center'}
+          as="main"
+          w={{ base: '100%', sm: '80%', xl: '100%' }}
+          ml={{ xl: '2rem' }}
+          pr={{ base: null, '2xl': '4rem' }}
+        >
+          <TopBar />
+          <Divider
+            display={{ base: 'none', xl: 'block' }}
+            mt="0.5rem"
+            mb="2rem"
+          />
+          <Flex
+            w="100%"
+            flexDir={{ base: 'column', xl: 'row' }}
+            justify="space-between"
+          >
+            <LeftSide accounts={accounts} />
+            <RecentTransactions transactions={transactions} />
+          </Flex>
+        </Box>
+      ) : (
+        <DummyData />
+      )}
     </Layout>
   );
 };
 
 export default Overview;
 
-// export async function getServerSideProps() {
-//   const res = await fetch(`${server}/api/plaid`);
-//   const { accounts, transactions } = await res.json();
+export async function getServerSideProps({ res }) {
+  const response = await fetch(`${server}/api/plaid`);
+  const errorCode = response.ok ? false : res.statusCode;
 
-//   return { props: { accounts, transactions } };
-// }
+  if (errorCode) {
+    res.statusCode = errorCode;
+  }
+
+  const data = await response.json();
+
+  return {
+    props: {
+      errorCode,
+      accounts: data.accounts,
+      transactions: data.transactions,
+    },
+  };
+}
